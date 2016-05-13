@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/lib/base.css" />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/scss/online.css" />
+	<title>webChat</title>
+</head>
+<body class="body-bg">
+	<div class="online-box">
+		<div class="online-inner">
+			<div class="left">
+				<ul class="userList">
+				</ul>
+			</div>
+			<div class="right">
+				<div class="header">
+					<h3>北大红杉webChat v1.0.0</h3>
+					<div class="win-btn-inner">
+						<span class="icon icon-min btn-min"></span>
+						<span class="icon icon-max btn-max"></span>
+						<span class="icon icon-colse btn-colse"></span>
+					</div>
+				</div>
+				<div class="message">
+					<ul class="messageList"></ul>
+				</div>
+				<div class="tools-send-box">
+					<div class="tools">
+						<i class="icon icon-smiley icon-tools"></i>
+						<i class="icon icon-pic icon-tools"></i>
+						<i class="icon icon-smiley icon-tools"></i>
+						<i class="icon icon-pic icon-tools"></i>
+						<i class="icon icon-smiley icon-tools"></i>
+						<i class="icon icon-pic icon-tools"></i>
+					</div>
+					<div class="textarea">
+						<textarea rows="5" cols="10" id="textMsg"></textarea>
+					</div>
+					<div class="actions">
+						<span class="fr" id="sendMsg">发送</span>
+					</div>
+				</div> 
+			</div>
+		</div> 
+	</div>
+	<script type="text/javascript" src="/javascripts/socket.io.js"></script>
+	<script src="/javascripts/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript">
+	/*****************socket操作******************/
+	function addUser(flag, client_id, obj){
+		console.log('addUser', flag, client_id, obj);
+
+		var str = '';
+		for(var i in obj){
+			var className = '';
+			if(obj[i].client_id != client_id){
+				!flag && sayHello(obj[i]);
+			}else{
+				className = 'active';
+			}
+			console.log('className', className);
+			str += '<li class="'+className+'">' +
+					'<img src="/images/lib/header/'+obj[i].header+'.png" alt="" />' +
+					'<span>'+obj[i].client_id+'</span>' +
+					'<i class="icon icon-colse user-close"></i>' +
+				'</li>';
+		}
+
+		$(".userList").html('');
+		$(".userList").append(str);
+	}
+	function sayHello(obj, self){
+		console.log('sayHello', obj);
+
+		var className = '';
+		if(self){
+			className = 'uright';
+		}
+
+		if(! obj.msg){
+			obj.msg = '大家好！初次见面，还请大家多多关照；';
+		}
+		var str = '<li class="'+className+'">' +
+						'<p>' +
+							'<img src="/images/lib/header/'+obj.header+'.png" alt="" />' +
+							'<span class="username">'+obj.client_id+'</span>' +
+						'</p>' +
+						'<div class="msg-box">' +
+							'<p class="smsg">'+obj.msg+'</p>' +
+						'</div>' +
+					'</li>';
+
+		$(".messageList").append(str);
+	}
+	</script>
+	<script type="text/javascript" src="/javascripts/base.js"></script>
+	<script type="text/javascript" src="/javascripts/chat.js"></script>
+</body>
+</html>
